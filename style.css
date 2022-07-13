@@ -1,0 +1,200 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+}
+
+
+.container {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+}
+main {
+    margin-top: 20%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+}
+.week-table {
+    background-color: #eee;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.week-table p {
+    width: fit-content;
+    font-size: 20px;
+    margin: 5px auto;
+    position: relative;
+}
+
+.week-table p::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: black;
+    height: 1px;
+}
+
+.week-table .cell {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.week-table .cell:not(:last-child){ 
+    border-bottom: 1px solid #ddd;
+}
+.week-table .cell .colors {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.color {
+    display: block;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.colors .color {
+    transition: 0.3s;
+}
+
+.text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.colors .color:nth-child(1) {
+    background-color: rgb(4, 163, 4);
+}
+.colors .color:nth-child(2) {
+    background-color: rgb(202, 202, 4);
+}
+.colors .color:nth-child(3) {
+    background-color: rgb(192, 7, 7);
+}
+
+.colors .color:nth-child(1):hover {
+    background-color: rgb(4, 235, 4);
+}
+.colors .color:nth-child(2):hover {
+    background-color: rgb(241, 241, 3);
+}
+.colors .color:nth-child(3):hover {
+    background-color: rgb(255, 0, 0);
+}
+
+.statics { 
+    display: flex;
+    gap: 50px;
+    font-weight: bold;
+    justify-content: center;
+}
+
+.statics .green-statics {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+}
+.statics .yellow-statics {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.statics .red-statics {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.statics .green-statics span:first-child {
+    display: block;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    transition: 0.3s;
+    background-color: rgb(4, 235, 4);
+}
+
+.statics .yellow-statics span:first-child {
+    display: block;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    transition: 0.3s;
+    background-color: rgb(241, 241, 3);
+}
+
+.statics .red-statics span:first-child {
+    display: block;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    transition: 0.3s;
+    background-color: rgb(255, 0, 0);
+}
+
+.timer {
+    text-align: center;
+    font-size: 26px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -230%);
+    border: 1px solid #777;
+    padding: 10px;
+    transition: 0.3s;
+}
+
+.money {
+    display: block;
+    border-right: transparent;
+    padding: 10px;
+}
+
+.combo {
+    border: 1px solid #777;
+    margin: 50px auto;
+    width: fit-content;
+    font-size: 21px;
+    display: flex;
+    border-radius: 5px;
+}
+
+button {
+    border: none;
+    outline: none;
+    border-left: 1px solid #777;
+    width: 65px;
+    background: rgb(247, 3, 3);
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: rgb(231, 4, 4)
+}
+
+@media (max-width: 650px) {
+    main {
+        margin-top: 35%;
+    }
+}
+
+@media (max-width: 380px) {
+    main {
+        margin-top: 45%;
+    }
+}
