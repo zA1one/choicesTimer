@@ -55,9 +55,9 @@ colors.forEach(function (color) {
             cells[i].children[0].children[1].style.backgroundColor = "rgb(202, 202, 4)"
             cells[i].children[0].children[2].style.backgroundColor = "rgb(192, 7, 7)"
         }
-        // hours.innerHTML = 23;
-        // minutes.innerHTML = 59;
-        seconds.innerHTML = 10;
+        hours.innerHTML = 23;
+        minutes.innerHTML = 59;
+        seconds.innerHTML = 59;
         let counter = setInterval(function () {
             if (+hours.innerHTML <= 10) {
                 if (+minutes.innerHTML == 0 && +seconds.innerHTML == 0 && +hours.innerHTML != 0) {
