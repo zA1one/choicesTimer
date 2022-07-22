@@ -1,52 +1,95 @@
 let colors = document.querySelectorAll(".week-table .cell .colors span");
-let colorsWithoutOne = document.querySelectorAll(".week-table .cell:not(:first-of-type)")
-let cells = document.querySelectorAll(".week-table .cell")
-let texts = document.querySelectorAll(".week-table .cell .text")
-let colorChecked = document.querySelectorAll(".week-table .cell .text .color")
-let greenText = document.querySelector(".green-text")
-let yellowText = document.querySelector(".yellow-text")
-let redText = document.querySelector(".red-text")
-let spans = document.querySelectorAll(".text span:nth-child(1)")
+let colorsWithoutOne = document.querySelectorAll(".week-table .cell:not(:first-of-type)");
+let cells = document.querySelectorAll(".week-table .cell");
+let texts = document.querySelectorAll(".week-table .cell .text");
+let colorChecked = document.querySelectorAll(".week-table .cell .text .color");
+let greenText = document.querySelector(".green-text");
+let yellowText = document.querySelector(".yellow-text");
+let redText = document.querySelector(".red-text");
+let spans = document.querySelectorAll(".text span:nth-child(1)");
 let colorsInside = document.querySelectorAll(".text .color");
 let hours = document.querySelector(".timer .hours");
 let minutes = document.querySelector(".timer .minutes");
 let seconds = document.querySelector(".timer .seconds");
 let timer = document.querySelectorAll(".timer span")
-let timerDiv = document.querySelector(".timer")
-let money = document.querySelector(".money span")
+let timerDiv = document.querySelector(".timer");
+let money = document.querySelector(".money span");
 let reset = document.querySelector("button");
+let arr = [];
+
+// functions
+
+function counter() {
+    let counter = setInterval(function () {
+        let time = new Date();
+        console.log(`${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`)
+        if (`${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}` == "2:0:0") {
+            readyOrNot.innerText = "Ready!"
+            for (let i = 0; i < cells.length; i++) {
+                if (getComputedStyle(colorChecked[i]).getPropertyValue("background-color") === "rgba(0, 0, 0, 0)") {
+                    colorChecked[i].parentElement.parentElement.style.cssText = ""
+                    colorChecked[i].parentElement.parentElement.children[0].children[0].style.backgroundColor = "rgb(4, 235, 4)";
+                    colorChecked[i].parentElement.parentElement.children[0].children[1].style.backgroundColor = "rgb(241, 241, 3)";
+                    colorChecked[i].parentElement.parentElement.children[0].children[2].style.backgroundColor = "rgb(255, 0, 0)";
+                    break;
+                }
+            }
+            clearInterval(counter)
+        } else {
+            readyOrNot.innerText = "It's Not 8 Yet!"
+        }
+    }, 1000)
+}
+
+function counting() {
+    let arrRed = []
+    let arrGreen = []
+    let arrYellow = []
+    for (let i = 0; i < colorsInside.length; i++) {
+        if (getComputedStyle(colorsInside[i]).getPropertyValue("background-color") == "rgb(4, 235, 4)") {
+            arrGreen.push(i)
+        } else if (getComputedStyle(colorsInside[i]).getPropertyValue("background-color") == "rgb(241, 241, 3)") {
+            arrYellow.push(i)
+        } else if (getComputedStyle(colorsInside[i]).getPropertyValue("background-color") == "rgb(255, 0, 0)") {
+            arrRed.push(i)
+        }
+    }
+    greenText.innerHTML = arrGreen.length;
+    yellowText.innerHTML = arrYellow.length;
+    redText.innerHTML = arrRed.length;
+    money.innerHTML = +redText.innerHTML * 5
+}
+
+// disabling all the choices and show Ready!
+cells.forEach(color => color.style.cssText = "pointer-events: none");
+let readyOrNot = document.createElement("span");
+readyOrNot.innerHTML = "It's Not 8 Yet!"
+readyOrNot.style.cssText = "position: absolute;left: 50%;transform: translate(-50%, -250%);font-size: 20px;color: rgb(244, 0, 0);"
 
 
-colorsWithoutOne.forEach(color => color.style.cssText = "pointer-events: none");
-let spanBeginning = document.createElement("span");
-spanBeginning.innerHTML = "Ready!"
-spanBeginning.style.cssText = "position: absolute;left: 50%;transform: translate(-50%, -250%);font-size: 20px;color: rgb(244, 0, 0);"
-document.querySelector(".timer").after(spanBeginning)
+// applying localStorage Items
+if (localStorage.length != 0) {
+    let re = /rgb\(\d{1,}, \d{1,}, \d{1,}\)/ig;
+    let theNewArr = localStorage.getItem("colors").match(re);
+    for (let i = 0; i < theNewArr.length; i++) {
+        colorsInside[i].style.backgroundColor = theNewArr[i];
+    }
+    counter();
+    counting()
+} else {
+    readyOrNot.innerText = "Ready!"
+    cells[0].style.cssText = "";
+}
+document.querySelector(".timer").after(readyOrNot)
 
 colors.forEach(function (color) {
     color.addEventListener("click", function () {
-        spanBeginning.remove()
-        if (timerDiv.nextElementSibling.tagName == "SPAN") {
-            timerDiv.nextElementSibling.remove()
-        }
         color.parentElement.nextElementSibling.children[0].style.backgroundColor = window.getComputedStyle(color).getPropertyValue("background-color")
+        // storing in localStorage
+        arr.push(window.getComputedStyle(color).getPropertyValue("background-color"));
+        localStorage.setItem("colors", JSON.stringify(arr));
         // counting colors
-        let arrRed = []
-        let arrGreen = []
-        let arrYellow = []
-        for (let i = 0; i < colorsInside.length; i++) {
-            if (getComputedStyle(colorsInside[i]).getPropertyValue("background-color") == "rgb(4, 235, 4)") {
-                arrGreen.push(i)
-            } else if (getComputedStyle(colorsInside[i]).getPropertyValue("background-color") == "rgb(241, 241, 3)") {
-                arrYellow.push(i)
-            } else if (getComputedStyle(colorsInside[i]).getPropertyValue("background-color") == "rgb(255, 0, 0)") {
-                arrRed.push(i)
-            }
-        }
-        greenText.innerHTML = arrGreen.length;
-        yellowText.innerHTML = arrYellow.length;
-        redText.innerHTML = arrRed.length;
-        money.innerHTML = +redText.innerHTML * 5
+        counting();
         // disable current element
         color.parentElement.parentElement.style.cssText = "pointer-events: none";
         // making colors darker
@@ -55,70 +98,16 @@ colors.forEach(function (color) {
             cells[i].children[0].children[1].style.backgroundColor = "rgb(202, 202, 4)"
             cells[i].children[0].children[2].style.backgroundColor = "rgb(192, 7, 7)"
         }
-        hours.innerHTML = 23;
-        minutes.innerHTML = 59;
-        seconds.innerHTML = 59;
-        let counter = setInterval(function () {
-            if (+hours.innerHTML <= 10) {
-                if (+minutes.innerHTML == 0 && +seconds.innerHTML == 0 && +hours.innerHTML != 0) {
-                    hours.innerHTML = `0${hours.innerHTML - 1}`;
-                    minutes.innerHTML = 59;
-                    seconds.innerHTML = 60;
-                }
-            } else if (+hours.innerHTML > 9) {
-                if (+minutes.innerHTML == 0 && +seconds.innerHTML == 0 && +hours.innerHTML != 0) {
-                    hours.innerHTML = hours.innerHTML - 1;
-                    minutes.innerHTML = 59;
-                    seconds.innerHTML = 60;
-                }
-            }
-            if (+minutes.innerHTML <= 10) {
-                if (+seconds.innerHTML == 0 && +minutes.innerHTML != 0) {
-                    minutes.innerHTML = `0${minutes.innerHTML - 1}`;
-                    seconds.innerHTML = 60;
-                }
-            } else if (+minutes.innerHTML > 9) {
-                if (+seconds.innerHTML == 0 && +minutes.innerHTML != 0) {
-                    minutes.innerHTML = minutes.innerHTML - 1;
-                    seconds.innerHTML = 60;
-                }
-            }
-            if (+seconds.innerHTML <= 10 && +seconds.innerHTML != 0) {
-                seconds.innerHTML = `0${seconds.innerHTML - 1}`
-            } else if (+seconds.innerHTML > 9 && +seconds.innerHTML != 0) {
-                seconds.innerHTML = seconds.innerHTML - 1
-            }
-            let time = "";
-            for (let i = 0; i < timer.length; i++) {
-                time += timer[i].innerHTML
-            }
-            if (time === "00:00:00") {
-                let span = document.createElement("span");
-                span.innerHTML = "Ready!"
-                span.style.cssText = "position: absolute;left: 50%;transform: translate(-50%, -250%);font-size: 20px;color: rgb(244, 0, 0);"
-                document.querySelector(".timer").after(span)
-                for (let i = 0; i < cells.length; i++) {
-                    if (getComputedStyle(colorChecked[i]).getPropertyValue("background-color") === "rgba(0, 0, 0, 0)") {
-                        colorChecked[i].parentElement.parentElement.style.cssText = ""
-                        colorChecked[i].parentElement.parentElement.children[0].children[0].style.backgroundColor = "rgb(4, 235, 4)";
-                        colorChecked[i].parentElement.parentElement.children[0].children[1].style.backgroundColor = "rgb(241, 241, 3)";
-                        colorChecked[i].parentElement.parentElement.children[0].children[2].style.backgroundColor = "rgb(255, 0, 0)";
-                        break;
-                    }
-                }
-                clearInterval(counter)
-            }
-        }, 1000);
+        counter();
     })
 })
 
 reset.addEventListener("click", function () {
     colorsInside.forEach(color => color.style.backgroundColor = "rgba(0, 0, 0, 0)");
-    hours.innerHTML = "00"
-    minutes.innerHTML = "00"
-    seconds.innerHTML = "00"
+    localStorage.clear();
     greenText.innerHTML = 0;
     yellowText.innerHTML = 0;
     redText.innerHTML = 0;
     money.innerHTML = 0
+    window.location.reload();
 })
